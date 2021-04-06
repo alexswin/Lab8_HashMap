@@ -66,7 +66,7 @@ private:
 	 */
 	unsigned int hash(string key) const;
 
-	void buildNode(Node* &newNode, string key, int value, Node* prev, Node* next);
+	int& at(string key);
 
 public:
 	Hashmap();

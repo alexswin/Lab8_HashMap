@@ -45,33 +45,11 @@ unsigned int Hashmap::hash(string key) const {
 }
 
 
-void Hashmap::buildNode(Node* &newNode, string key, int value, Node* prev, Node* next) {
-	cout << "In buildNode" << endl;
-	if(newNode == NULL) {
-		cout << "Node is NULL, can't build. Throwing exception..." << endl;
-		throw("Error: cannot build a NULL node!");
-		//Should be throw(invalid_argument("Error: cannot build a NULL node!"));
-		//But I think it might throw off the autograders
-	}
-	else {
-		cout << "Building..." << endl;
-		newNode->key = key;
-		cout << "Key is " << newNode->key << " (should be " << key << ")" << endl;
-		newNode->value = value;
-		cout << "Value is " << newNode->value << " (should be " << value << ")" << endl;
-		newNode->prev = prev;
-		newNode->next = next;
-	}
-}
-
-
 // Normally should rehash before inserting if average number of nodes per bucket is greater than 1, but I don't think I'm supposed to for this lab
 // Rehashing: make a new array that's twice as big, iterate through old array, hash and insert all items into new array; point to new array
 void Hashmap::insert(string key, int value) {
-	unsigned int hashcode = hash(key);
-	Node* currItem = buckets[hashcode];
-	cout << "Hashcode is " << hashcode << endl;
-
+	at(key) = value;
+/*
 	if(currItem == NULL) { //Empty bucket; create new head node
 		currItem = new Node();
 		cout << "Empty bucket, making new head node" << endl;
@@ -103,7 +81,7 @@ void Hashmap::insert(string key, int value) {
 			++mapSize;
 			return;
 		}
-	}
+	}*/
 }
 
 
@@ -123,7 +101,6 @@ int Hashmap::get(string key) const{
 
 
 int Hashmap::size() const {
-	cout << "In size. Size is " << mapSize << endl;
 	return mapSize;
 }
 
@@ -147,9 +124,14 @@ string Hashmap::toString() const {
 }
 
 
-bool Hashmap::contains(string key) const { //FIXME
-	cout << "False.";
-	return false;
+bool Hashmap::contains(string key) const {
+	try {
+		get(key);
+		return true;
+	}
+	catch(invalid_argument) {
+		return false;
+	}
 }
 
 
@@ -159,7 +141,29 @@ int& Hashmap::operator [](string key) {
 
 
 int& Hashmap::at(string key) {
-	
+	unsigned int hashcode = hash(key);
+	Node* currItem = buckets[hashcode];
+	while(currItem != NULL) {
+		if(currItem->key == key) {
+			break;
+		}
+		else {
+			currItem = currItem->next;
+		}
+	}
+	if(currItem == NULL) { //Create a new Node at the beginning of the list
+		currItem = new Node();
+		currItem->next = buckets[hashcode];
+		currItem->prev = NULL;
+		currItem->key = key;
+		if (buckets[hashcode] != NULL) {
+			buckets[hashcode]->prev = currItem;
+		}
+		buckets[hashcode] = currItem;
+		//Not bothering to set value because we are supposed to return a reference to value. I'm following a help video, though. It still seems like you would get errors without a default value.
+		++mapSize;
+	}
+	return currItem->value;
 }
 
 
