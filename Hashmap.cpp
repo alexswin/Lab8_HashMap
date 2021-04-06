@@ -49,39 +49,6 @@ unsigned int Hashmap::hash(string key) const {
 // Rehashing: make a new array that's twice as big, iterate through old array, hash and insert all items into new array; point to new array
 void Hashmap::insert(string key, int value) {
 	at(key) = value;
-/*
-	if(currItem == NULL) { //Empty bucket; create new head node
-		currItem = new Node();
-		cout << "Empty bucket, making new head node" << endl;
-		buildNode(currItem, key, value, NULL, NULL);
-		cout << "currItem: " << key << ", " << value << endl;
-		++mapSize;
-		return;
-	}
-
-	else { //currItem != NULL, i.e. bucket is not empty
-		Node* prevItem;
-		do {
-			prevItem = currItem;
-			currItem = currItem->next;
-		} while(currItem != NULL && currItem->key != key);
-
-		if(currItem != NULL) { //key found at currItem; change value
-			currItem->value = value;
-			cout << "Key found, changing value." << endl;
-			cout << "currItem: " << key << ", " << value << endl;
-			return;
-		}
-
-		else { //key not found in bucket; reached end of list; create new node
-			cout << "Bucket not empty but key not present. Making new node" << endl;
-			currItem = new Node();
-			buildNode(currItem, key, value, prevItem, NULL);
-			cout << "currItem: " << key << ", " << value << endl;
-			++mapSize;
-			return;
-		}
-	}*/
 }
 
 
@@ -156,11 +123,11 @@ int& Hashmap::at(string key) {
 		currItem->next = buckets[hashcode];
 		currItem->prev = NULL;
 		currItem->key = key;
+		currItem->value = 0;
 		if (buckets[hashcode] != NULL) {
 			buckets[hashcode]->prev = currItem;
 		}
 		buckets[hashcode] = currItem;
-		//Not bothering to set value because we are supposed to return a reference to value. I'm following a help video, though. It still seems like you would get errors without a default value.
 		++mapSize;
 	}
 	return currItem->value;
