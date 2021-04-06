@@ -1,0 +1,14 @@
+size 0
+insert apple 3
+size 1
+insert carrot 7
+size 2
+insert grapefruit 1
+size 3
+insert banana 8
+size 4
+get apple invalid_argument
+get carrot invalid_argument
+get grapefruit invalid_argument
+get banana invalid_argument
+size 4

@@ -46,14 +46,19 @@ unsigned int Hashmap::hash(string key) const {
 
 
 void Hashmap::buildNode(Node* &newNode, string key, int value, Node* prev, Node* next) {
+	cout << "In buildNode" << endl;
 	if(newNode == NULL) {
+		cout << "Node is NULL, can't build. Throwing exception..." << endl;
 		throw("Error: cannot build a NULL node!");
 		//Should be throw(invalid_argument("Error: cannot build a NULL node!"));
 		//But I think it might throw off the autograders
 	}
 	else {
+		cout << "Building..." << endl;
 		newNode->key = key;
+		cout << "Key is " << newNode->key << " (should be " << key << ")" << endl;
 		newNode->value = value;
+		cout << "Value is " << newNode->value << " (should be " << value << ")" << endl;
 		newNode->prev = prev;
 		newNode->next = next;
 	}
@@ -65,10 +70,13 @@ void Hashmap::buildNode(Node* &newNode, string key, int value, Node* prev, Node*
 void Hashmap::insert(string key, int value) {
 	unsigned int hashcode = hash(key);
 	Node* currItem = buckets[hashcode];
+	cout << "Hashcode is " << hashcode << endl;
 
 	if(currItem == NULL) { //Empty bucket; create new head node
 		currItem = new Node();
+		cout << "Empty bucket, making new head node" << endl;
 		buildNode(currItem, key, value, NULL, NULL);
+		cout << "currItem: " << key << ", " << value << endl;
 		++mapSize;
 		return;
 	}
@@ -82,12 +90,16 @@ void Hashmap::insert(string key, int value) {
 
 		if(currItem != NULL) { //key found at currItem; change value
 			currItem->value = value;
+			cout << "Key found, changing value." << endl;
+			cout << "currItem: " << key << ", " << value << endl;
 			return;
 		}
 
 		else { //key not found in bucket; reached end of list; create new node
+			cout << "Bucket not empty but key not present. Making new node" << endl;
 			currItem = new Node();
 			buildNode(currItem, key, value, prevItem, NULL);
+			cout << "currItem: " << key << ", " << value << endl;
 			++mapSize;
 			return;
 		}
@@ -111,6 +123,7 @@ int Hashmap::get(string key) const{
 
 
 int Hashmap::size() const {
+	cout << "In size. Size is " << mapSize << endl;
 	return mapSize;
 }
 
@@ -140,10 +153,13 @@ bool Hashmap::contains(string key) const { //FIXME
 }
 
 
-int& Hashmap::operator [](string key) { //FIXME
-	cout << "False.";
-	int* bogus = new int(0);
-	return *bogus;
+int& Hashmap::operator [](string key) {
+	return at(key);
+}
+
+
+int& Hashmap::at(string key) {
+	
 }
 
 
