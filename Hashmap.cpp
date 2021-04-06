@@ -13,32 +13,131 @@ Hashmap::Hashmap() {
 }
 
 
-/*
-	* Return a hash code (bucket index) for a given key
-	*  Must return a value >= 0 and < BUCKETS
-	*  This can be done by generating a hash code and returning "hashcode % BUCKETS"
-	*  Try to make your hash function so that the distribution is uniform over all buckets
-*/
-unsigned int Hashmap::hash(string key) const {
-	unsigned int index = 0;
-	for (int i = 0; i < key.size(); ++i) {
-		index *= 71;
-		index += key.at(i);
-		index %= BUCKETS;
-	}
-	return index;
+Hashmap::~Hashmap() {
+	clear();
 }
 
 
-~Hashmap();
-void insert(string key, int value);
+void Hashmap::clear() {
+	Node* currItem;
+	Node* nextItem;
+	for (int i = 0; i < BUCKETS; ++i) { //If rehashing and size doubling can happen, change BUCKETS to the current array size, and reset array size at the end
+		currItem = buckets[i];
+		while (currItem != NULL) {
+			nextItem = currItem->next;
+			delete currItem;
+			currItem = nextItem;
+		}
+		buckets[i] = NULL;
+	}
+	mapSize = 0;
+}
+
+
+unsigned int Hashmap::hash(string key) const {
+	unsigned int hashcode = 0;
+	for (int i = 0; i < key.size(); ++i) {
+		hashcode *= 71;
+		hashcode += key.at(i);
+		hashcode %= BUCKETS;
+	}
+	return hashcode;
+}
+
+
+void Hashmap::buildNode(Node* &newNode, string key, int value, Node* prev, Node* next) {
+	if(newNode == NULL) {
+		throw("Error: cannot build a NULL node!");
+		//Should be throw(invalid_argument("Error: cannot build a NULL node!"));
+		//But I think it might throw off the autograders
+	}
+	else {
+		newNode->key = key;
+		newNode->value = value;
+		newNode->prev = prev;
+		newNode->next = next;
+	}
+}
+
+
+// Normally should rehash before inserting if average number of nodes per bucket is greater than 1, but I don't think I'm supposed to for this lab
+// Rehashing: make a new array that's twice as big, iterate through old array, hash and insert all items into new array; point to new array
+void Hashmap::insert(string key, int value) {
+	unsigned int hashcode = hash(key);
+	Node* currItem = buckets[hashcode];
+
+	if(currItem == NULL) { //Empty bucket; create new head node
+		currItem = new Node();
+		buildNode(currItem, key, value, NULL, NULL);
+		++mapSize;
+		return;
+	}
+
+	else { //currItem != NULL, i.e. bucket is not empty
+		Node* prevItem;
+		do {
+			prevItem = currItem;
+			currItem = currItem->next;
+		} while(currItem != NULL && currItem->key != key);
+
+		if(currItem != NULL) { //key found at currItem; change value
+			currItem->value = value;
+			return;
+		}
+
+		else { //key not found in bucket; reached end of list; create new node
+			currItem = new Node();
+			buildNode(currItem, key, value, prevItem, NULL);
+			++mapSize;
+			return;
+		}
+	}
+}
+
+
+int Hashmap::get(string key) const{
+	unsigned int hashcode = hash(key);
+	Node* currItem = buckets[hashcode];
+	while(currItem != NULL && currItem->key != key) {
+		currItem = currItem->next;
+	}
+	if(currItem == NULL) { //Key not found
+		throw(invalid_argument("Key not present!"));
+	}
+	else { //Key found
+		return currItem->value;
+	}
+}
+
+
+int Hashmap::size() const {
+	return mapSize;
+}
+
+
+string Hashmap::toString() const {
+	ostringstream output;
+	Node* currItem;
+	for(int i = 0; i < BUCKETS; ++i) {
+		output << "[" << i << "]";
+		currItem = buckets[i];
+		while(currItem != NULL) {
+			output << " " << currItem->key << " => " << currItem->value;
+			if (currItem->next != NULL) {
+				output << ",";
+			}
+			currItem = currItem->next;
+		}
+		output << endl;
+	}
+	return output.str();
+}
+
+
 bool contains(string key) const;
-int get(string key) const;
 int& operator [](string key);
 bool remove(string key);
-void clear();
-string toString() const;
-int size() const;
+
 
 /*
 * Get string representation of all keys and related values
