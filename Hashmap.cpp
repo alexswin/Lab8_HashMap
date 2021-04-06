@@ -134,9 +134,30 @@ int& Hashmap::at(string key) {
 }
 
 
-bool Hashmap::remove(string key) { //FIXME
-	cout << "False.";
-	return false;
+bool Hashmap::remove(string key) {
+	unsigned int hashcode = hash(key);
+	Node* currItem = buckets[hashcode];
+	while(currItem != NULL) {
+		currItem = currItem->next;
+	}
+	if(currItem == NULL) {
+		return false;
+	}
+	else {
+		Node* delMe = currItem;
+		currItem = delMe->next;
+		// (...) -- delMe -- currItem -- (...)
+		if(delMe->prev == NULL) { //delMe is head
+			buckets[hashcode] = currItem;
+		}
+		else { //delMe is not head
+			delMe->prev->next = currItem;
+		}
+		currItem->prev = delMe->prev;
+		delete delMe;
+		--mapSize;
+		return true;
+	}
 }
 
 
