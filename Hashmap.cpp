@@ -134,28 +134,45 @@ string Hashmap::toString() const {
 }
 
 
-bool contains(string key) const;
-int& operator [](string key);
-bool remove(string key);
+bool Hashmap::contains(string key) const { //FIXME
+	cout << "False.";
+	return false;
+}
+
+
+int& Hashmap::operator [](string key) { //FIXME
+	cout << "False.";
+	int* bogus = new int(0);
+	return *bogus;
+}
+
+
+bool Hashmap::remove(string key) { //FIXME
+	cout << "False.";
+	return false;
+}
 
 
 /*
-* Get string representation of all keys and related values
-*  Sort by values in descending order
-*   For nodes that have the same value, sort alphabetically by key in ascending order.
-*   You should use the NodeCompare struct to sort nodes.
-*  Because a hashmap cannot sort items, you will have to use a different data structure
-*   to do the sorting. Use a priority queue to do a heapsort.
-*  Each key/value pair in the map should be on its own line with no leading or trailing spaces:
-*
-*  key => value
-*
-* For example:
-*  bob => 13
-*  alice => 9
-*  eve => 3
-*  steve => 3
-*  nancy => 1
-*  tom => 1
+	* Get string representation of all keys and related values
+	*  Sort by values in descending order
+	*   For nodes that have the same value, sort alphabetically by key in ascending order.
+	*   You should use the NodeCompare struct to sort nodes.
+	*  Because a hashmap cannot sort items, you will have to use a different data structure
+	*   to do the sorting. Use a priority queue to do a heapsort.
+	*  Each key/value pair in the map should be on its own line with no leading or trailing spaces:
+	*
+	*  key => value
+	*
+	* For example:
+	*  bob => 13
+	*  alice => 9
+	*  eve => 3
+	*  steve => 3
+	*  nancy => 1
+	*  tom => 1
 */
-string toSortedString() const;
+string Hashmap::toSortedString() const { //FIXME
+	cout << "False.";
+	return "false";
+}
