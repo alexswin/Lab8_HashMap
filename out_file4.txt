@@ -1,0 +1,29 @@
+size 0
+[] Aachen 1
+[] Aachens 1
+[] aardvark 1
+[] aardvarks 1
+[] aardvarks 1
+[] Aarhus 1
+[] Aarhuss 1
+[] Aaron 1
+[] Aarons 1
+[] Aaronvitch 1
+[] Aaronvitchs 1
+[] Ababa 1
+[] Ababas 1
+[] aback 1
+[] abacus 1
+[] abacuses 1
+[] abacuss 1
+[] abaft 1
+[] abalone 1
+[] abalones 1
+[] abalones 1
+[] abandon 1
+[] abandoned 1
+[] abandoner 1
+size 22
+contains Aaron true
+remove Aaron true
+size 21

@@ -137,7 +137,7 @@ int& Hashmap::at(string key) {
 bool Hashmap::remove(string key) {
 	unsigned int hashcode = hash(key);
 	Node* currItem = buckets[hashcode];
-	while(currItem != NULL) {
+	while(currItem != NULL && currItem->key != key) {
 		currItem = currItem->next;
 	}
 	if(currItem == NULL) {
@@ -153,7 +153,7 @@ bool Hashmap::remove(string key) {
 		else { //delMe is not head
 			delMe->prev->next = currItem;
 		}
-		currItem->prev = delMe->prev;
+		currItem->prev = delMe->prev; //FIXME: what if currItem is NULL?
 		delete delMe;
 		--mapSize;
 		return true;
