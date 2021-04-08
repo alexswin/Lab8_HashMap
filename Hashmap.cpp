@@ -153,7 +153,9 @@ bool Hashmap::remove(string key) {
 		else { //delMe is not head
 			delMe->prev->next = currItem;
 		}
-		currItem->prev = delMe->prev; //FIXME: what if currItem is NULL?
+		if (currItem != NULL) {
+			currItem->prev = delMe->prev;
+		}
 		delete delMe;
 		--mapSize;
 		return true;
@@ -180,7 +182,22 @@ bool Hashmap::remove(string key) {
 	*  nancy => 1
 	*  tom => 1
 */
-string Hashmap::toSortedString() const { //FIXME
-	cout << "False.";
-	return "false";
+string Hashmap::toSortedString() const {
+  stringstream ss;
+  priority_queue<Node*, vector<Node*>, NodeCompare> nodeHeap;
+	Node* currItem;
+  for(int i = 0; i < BUCKETS; i++) {
+    // Iterate through each bucket. Use nodeHeap.push to push all Node* onto heap.
+		currItem = buckets[i];
+		while(currItem != NULL) {
+			nodeHeap.push(currItem);
+			currItem = currItem->next;
+		}
+  }
+  while(!nodeHeap.empty()) {
+    Node* top = nodeHeap.top(); // Get top node (next node in sorted order)
+    ss << top->key << " => " << top->value << endl; // Add node data to stringstream
+    nodeHeap.pop(); // Pop it off
+  }
+  return ss.str();
 }

@@ -26,8 +26,8 @@ int main(int argc, char* argv[])
 	std::string temp; // used to store the current instruction
 	Hashmap* map = NULL; // the hashmap
 
-	//for (int i = 0; i < NUM_FILES; i++) {
-	for (int i = 0; i < 4; i++) { //FIXME
+	for (int i = 0; i < NUM_FILES; i++) {
+	//for (int i = 0; i < 5; i++) { //FIXME
 		map = new Hashmap(); // the hashmap
 		ifs.open(fileArray[i]); // open the file to read from
 		ofs.open("out_" + fileArray[i]); // open the file to write to
